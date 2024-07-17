@@ -1,11 +1,41 @@
+using JobCandidate.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text;
+using JobCandidate.Aplication;
+using JobCandidate.Domain;
+using JobCandidate;
+using JobCandidate.Infrastructure.Repositories;
+using JobCandidate.Swagger;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CodeProjectConnectionString"));
+
+});
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICandidateService, CandidateService>();
+
+builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+
+
+#region Register AutoMapper
+builder.Services.AddAutoMapper(typeof(CandidateProfile).Assembly);
+#endregion
+
+
 
 var app = builder.Build();
 
@@ -18,6 +48,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

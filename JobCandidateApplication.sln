@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobCandidate.Application", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobCandidate.Domain", "..\JobCandidate.Domain\JobCandidate.Domain.csproj", "{7CBB2C87-8581-48F0-9712-FE983FEF12F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobCandidate.Infastructure", "..\JobCandidate.Infastructure\JobCandidate.Infastructure.csproj", "{6B15A2D7-9971-41B8-BA59-2CFF19D92687}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobCandidate.Infrastructure", "..\JobCandidate.Infastructure\JobCandidate.Infrastructure.csproj", "{6B15A2D7-9971-41B8-BA59-2CFF19D92687}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
