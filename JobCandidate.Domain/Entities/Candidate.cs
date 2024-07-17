@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualBasic;
+﻿using JobCandidate.Domain.Common.Audit;
+using Microsoft.VisualBasic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobCandidate.Domain.Entities
 {
-    public class Candidate 
+    public class Candidate : IDateTimeSignature, IEntityUserSignature, IDeletionSignature
     {
         #region Properties
 
@@ -32,7 +33,27 @@ namespace JobCandidate.Domain.Entities
         [Required]
         public string FreeTextComment { get; set; }
 
-     
+
         #endregion
+
+        #region DeletionSignature
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletionDate { get; set; }
+        public long? DeletedByUserId { get; set; }
+        public bool? MustDeletedPhysical { get; set; }
+        #endregion
+
+        #region DateTimeSignature
+        public DateTime? FirstModificationDate { get; set; }
+        public DateTime? LastModificationDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        #endregion
+
+        #region UserSignature
+        public long? FirstModifiedByUserId { get; set; }
+        public long? LastModifiedByUserId { get; set; }
+        public long? CreatedByUserId { get; set; }
+        #endregion
+
     }
 }
