@@ -9,6 +9,7 @@ using JobCandidate.Domain;
 using JobCandidate;
 using JobCandidate.Infrastructure.Repositories;
 using JobCandidate.Swagger;
+using JobCandidate.Aplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +28,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 
 #region Register AutoMapper

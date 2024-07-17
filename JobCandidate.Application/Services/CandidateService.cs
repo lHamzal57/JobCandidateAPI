@@ -3,7 +3,7 @@ using JobCandidate.Domain;
 using JobCandidate.Domain.Entities;
 using JobCandidate.Aplication;
 
-namespace JobCandidate.Aplication
+namespace JobCandidate.Aplication.Services
 {
     public class CandidateService : ICandidateService
     {

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JobCandidate.Application\JobCandidate.Application.csproj" />
     <ProjectReference Include="..\JobCandidate.Domain\JobCandidate.Domain.csproj" />
   </ItemGroup>
 
