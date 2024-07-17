@@ -1,4 +1,5 @@
-﻿using JobCandidate.Domain.Entities;
+﻿using JobCandidate.Application.Models.ViewModel;
+using JobCandidate.Domain.Entities;
 
 namespace JobCandidate.Aplication
 {

@@ -13,6 +13,7 @@ using JobCandidate.Aplication.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using JobCandidate.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 #region Register AutoMapper
