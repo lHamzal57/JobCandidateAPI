@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
+
 
 namespace JobCandidate.UnitTest.Controllers
 {
@@ -21,7 +23,7 @@ namespace JobCandidate.UnitTest.Controllers
         private readonly IMapper _mapper;
         private readonly Mock<ILogger<CandidateController>> _mockLogger;
 
-        public CandidatesControllerTests()
+        public CandidateControllerTest()
         {
             _mockCandidateService = new Mock<ICandidateService>();
             _mockLogger = new Mock<ILogger<CandidateController>>();
@@ -44,10 +46,17 @@ namespace JobCandidate.UnitTest.Controllers
                 LastName = "Hamza",
                 Phone = "123-456-7890",
                 Email = "mohamed.hamza@smarttechsys.com",
+                BestTimeToCall = new TimeInterval
+                {
+                    Start = new TimeSpan(9, 0, 0),
+                    End = new TimeSpan(17, 0, 0)
+                },
+                LinkedInProfileUrl = "https://www.linkedin.com/in/se-mohamed-hamza/",
+                GitHubProfileUrl = "https://github.com/lHamzal57",
+                FreeTextComment = "Looking forward to discussing this opportunity."
             };
 
-            //Mapping to entity
-            var entity = candidateModel.ToAddEntity(this._mapper);
+            var entity = _mapper.Map<Candidate>(candidateModel);
 
             _mockCandidateService.Setup(service => service.UpsertCandidateAsync(It.IsAny<Candidate>()))
                                  .ReturnsAsync(entity);
@@ -58,7 +67,7 @@ namespace JobCandidate.UnitTest.Controllers
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(200, okResult.StatusCode);
-            var returnValue = Assert.IsType<UpsertCandidateViewModel>(okResult.Value);
+            var returnValue = Assert.IsType<Candidate>(okResult.Value);
             Assert.Equal(entity.Email, returnValue.Email);
         }
 
@@ -74,13 +83,17 @@ namespace JobCandidate.UnitTest.Controllers
                 LastName = "Hamza",
                 Phone = "123-456-7890",
                 Email = "mohamed.hamza@smarttechsys.com",
-               
+                BestTimeToCall = new TimeInterval
+                {
+                    Start = new TimeSpan(9, 0, 0),
+                    End = new TimeSpan(17, 0, 0)
+                },
                 LinkedInProfileUrl = "https://www.linkedin.com/in/se-mohamed-hamza/",
+                GitHubProfileUrl = "https://github.com/lHamzal57",
+                FreeTextComment = "Looking forward to discussing this opportunity."
             };
 
-            //Mapping to entity
-            var entity = candidateModel.ToAddEntity(this._mapper);
-
+            var entity = _mapper.Map<Candidate>(candidateModel);
 
             // Act
             var result = await _controller.UpsertCandidate(entity);
