@@ -18,7 +18,7 @@ namespace JobCandidate.UnitTest.Services
         private readonly IMapper _mapper;
         private readonly Mock<ILogger<CandidateService>> _mockLogger;
 
-        public CandidateServiceTests()
+        public CandidateServiceTest()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockLogger = new Mock<ILogger<CandidateService>>();
@@ -32,10 +32,10 @@ namespace JobCandidate.UnitTest.Services
         }
 
         [Fact]
-        public async Task AddOrUpdateCandidateAsync_ShouldAddNewCandidate()
+        public async Task UpsertCandidateAsync_ShouldAddNewCandidate_WhenCandidateDoesNotExist()
         {
             // Arrange
-            var candidateModel = new UpsertCandidateViewModel
+            var candidateDto = new Candidate
             {
                 FirstName = "Mohamed",
                 LastName = "Hamza",
@@ -51,25 +51,24 @@ namespace JobCandidate.UnitTest.Services
                 FreeTextComment = "Looking forward to discussing this opportunity."
             };
 
-            _mockUnitOfWork.Setup(uow => uow.Candidates.GetByEmailAsync(It.IsAny<string>()))
+            _mockUnitOfWork.Setup(uow => uow.Candidates.GetByEmailAsync(candidateDto.Email))
                            .ReturnsAsync((Candidate)null);
-            
-            //Mapping to entity
-            var entity = candidateModel.ToAddEntity(this._mapper);
 
             // Act
-            await _candidateService.UpsertCandidateAsync(entity);
+            var result = await _candidateService.UpsertCandidateAsync(candidateDto);
 
             // Assert
             _mockUnitOfWork.Verify(uow => uow.Candidates.AddAsync(It.IsAny<Candidate>()), Times.Once);
             _mockUnitOfWork.Verify(uow => uow.CompleteAsync(), Times.Once);
+            Assert.NotNull(result);
+            Assert.Equal(candidateDto.Email, result.Email);
         }
 
         [Fact]
-        public async Task AddOrUpdateCandidateAsync_ShouldUpdateExistingCandidate()
+        public async Task UpsertCandidateAsync_ShouldUpdateExistingCandidate_WhenCandidateExists()
         {
             // Arrange
-            var candidateModel = new UpsertCandidateViewModel
+            var candidateDto = new Candidate
             {
                 FirstName = "Mohamed",
                 LastName = "Hamza",
@@ -87,32 +86,28 @@ namespace JobCandidate.UnitTest.Services
 
             var existingCandidate = new Candidate
             {
-                Id = Guid.NewGuid(),
-                FirstName = "Mohamed",
-                LastName = "Hamza",
-                Phone = "123-456-7890",
+                FirstName = "Existing",
+                LastName = "Candidate",
+                Phone = "000-000-0000",
                 Email = "mohamed.hamza@smarttechsys.com",
                 BestTimeToCall = new TimeInterval
                 {
-                    Start = new TimeSpan(9, 0, 0),
-                    End = new TimeSpan(17, 0, 0)
-                },
-                LinkedInProfileUrl = "https://www.linkedin.com/in/se-mohamed-hamza/",
-                GitHubProfileUrl = "https://github.com/lHamzal57",
-                FreeTextComment = "Looking forward to discussing this opportunity."
+                    Start = new TimeSpan(10, 0, 0),
+                    End = new TimeSpan(18, 0, 0)
+                }
             };
 
-            _mockUnitOfWork.Setup(uow => uow.Candidates.GetByEmailAsync(It.IsAny<string>()))
+            _mockUnitOfWork.Setup(uow => uow.Candidates.GetByEmailAsync(candidateDto.Email))
                            .ReturnsAsync(existingCandidate);
 
-            //Mapping to entity
-            var entity = candidateModel.ToAddEntity(this._mapper);
             // Act
-            await _candidateService.UpsertCandidateAsync(entity);
+            var result = await _candidateService.UpsertCandidateAsync(candidateDto);
 
             // Assert
             _mockUnitOfWork.Verify(uow => uow.Candidates.UpdateAsync(It.IsAny<Candidate>()), Times.Once);
             _mockUnitOfWork.Verify(uow => uow.CompleteAsync(), Times.Once);
+            Assert.NotNull(result);
+            Assert.Equal(candidateDto.Email, result.Email);
         }
     }
 }
