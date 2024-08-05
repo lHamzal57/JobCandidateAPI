@@ -20,6 +20,7 @@ namespace JobCandidate.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
+            // This line configures the modelBuilder to use identity columns for primary key generation in SQL Server
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("JobCandidate.Domain.Entities.Auth", b =>
