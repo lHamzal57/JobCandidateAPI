@@ -176,3 +176,8 @@ JobCandidate.sln
     ```sh
     dotnet test
     ```
+The Result of tests:
+
+```A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5, Duration: 1 s - JobCandidate.UnitTest.dll (net8.0)```
